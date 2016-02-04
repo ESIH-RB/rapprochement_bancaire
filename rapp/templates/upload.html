@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Uploaded File</title>
+	</head>
+	<body>
+		<form action="excel/comp" method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form }}
+			<input type="submit" value="Enregister" />
+		</form>
+	</body>
+</html>
