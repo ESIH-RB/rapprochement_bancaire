@@ -4,8 +4,12 @@ from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 from rapp.forms import FichierForm
 import django_excel as excel
 import xlrd
+import os
 #import pyexcel.ext.xls 
 #import pyexcel.ext.xlsx 
+
+APP_DIR = os.path.dirname(__file__)  # get current directory
+#file_path = os.path.join(APP_DIR, 'baz.txt')  || File path to use in searching uploaded's file
 
 def parse(request, data_struct_type):
     form = FichierForm(request.POST, request.FILES)
@@ -30,7 +34,8 @@ def parse(request, data_struct_type):
 def excel_handle(request):
     
     if request.method == 'POST':
-        wb = xlrd.open_workbook('rapp/files/namesdemo.xls')
+        file_path = os.path.join(APP_DIR, 'files/namesdemo.xls')
+        wb = xlrd.open_workbook(file_path)
         #print(wb.sheet_names())
         sh = wb.sheet_by_index(3)
         for t in range(sh.nrows):
