@@ -20,13 +20,28 @@ def uploadFile(f,name="fich.xls"):
 def excel_handle(request):
     
     if request.method == 'POST':
-        file_path = os.path.join(APP_DIR, 'files/namesdemo.xls')
+        file_path = os.path.join(APP_DIR, 'files/my.xls')
         uploadFile(request.FILES['file'],"my.xls")
-        #wb = xlrd.open_workbook(file_path)
-        #print(wb.sheet_names())
-        # sh = wb.sheet_by_index(3)
-        # for t in range(sh.nrows):
-        #     print(sh.row_values(t))
+        rlst = []
+        rlst2 = []
+        wb = xlrd.open_workbook(file_path)
+        print(wb.sheet_names())
+        sh = wb.sheet_by_index(0)
+        for t in range(sh.nrows):
+            if t > 5:
+                #print(sh.row_values(t))
+                ll = sh.row_values(t)
+                dict = {'Transaction':ll[2],'Amount': ll[9]}
+                rlst.append(dict)
+        sh2 = wb.sheet_by_index(1)
+
+        for t in range(sh2.nrows):
+            if t > 5:
+                print(sh2.row_values(t)[14])
+                # ll2 = sh2.row_values(t)
+                # dict = {'Transaction':ll2[2],'Amount': ll2[9]}
+                # rlst2.append(dict)
+        return JsonResponse({'la':rlst})
     form = FichierForm()
     return render(request,'upload.html',{'form':form})
 
