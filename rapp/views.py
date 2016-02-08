@@ -16,6 +16,7 @@ def uploadFile(f,name="fich.xls"):
         for chunk in f.chunks():
             des.write(chunk)
 
+#SOGEBANK's method for operations
 def getValidLineSOGEBANK(sheet):
     fil = []
     for line in range(sheet.nrows):
@@ -38,14 +39,56 @@ def putInLineSOGEBANK(tab): #Put in line SOGEBANK's file important infomations
             else:
                 sov[3]=tab[i][3]
                 final.append(sov)
+    #Removing '-' sign preventing convertion to fload
+    for z in range(len(final)):
+        if final[z][3] == '-':
+            final[z][3] = '0'
+        if final[z][4] == '-':
+            final[z][4] = '0'
+    #Removing '-' sign preventing convertion to fload
     return final
 
 def handle_SOGEBANK(sheet):
     return putInLineSOGEBANK(getValidLineSOGEBANK(sheet))
+#SOGEBANK's method for operations
+
+#Quickbooks version test handling
+def handle_QuickBooksv1(sheet):
+    all = []
+    for z in range(sheet.nrows):
+            if z > 4:
+                all.append(sheet.row_values(z))
+    return all
+#Quickbooks version test handling
 
 
+#Comparaison
+def convertingTOFloat(values):
+    try:
+        v = float(values)
+        return v
+    except:
+        r1 = values.replace(" ","")
+        r2 = r1.replace(",",".")
+        return float(r2)
+def comparingFiles(quickBv1,sogebank):
+    Cmp = []
+    InCmp = []
+    for i in range(len(quickBv1)):#QuickBooks
+            for j in range(len(sogebank)):#SOGEBANK
+                if quickBv1[i][2] == 'Expense':
+                    if (convertingTOFloat(quickBv1[i][9])*-1) == convertingTOFloat(sogebank[j][3]):
+                        dict = {'Transaction':quickBv1[i][2],'Posting':quickBv1[i][4],'Name':quickBv1[i][5],'Split':quickBv1[i][8],'Amount':quickBv1[i][9],'Date Eff':sogebank[j][0],'Cheque':sogebank[j][1],'Description':sogebank[j][2],'Debit':sogebank[j][3],'Credit':sogebank[j][4]}
+                        Cmp.append(dict)
+                        # print(str(quickBv1[i][2])+" "+str(quickBv1[i][4])+" "+str(quickBv1[i][5])+" "+str(quickBv1[i][8])+" "+str(quickBv1[i][9])+" "+str(sogebank[j][0])+" "+str(sogebank[j][1])+" "+str(sogebank[j][2])+" "+str(sogebank[j][3])+" "+str(sogebank[j][4]))
+                    else:
+                        dict2 = {'Transaction':quickBv1[i][2],'Posting':quickBv1[i][4],'Name':quickBv1[i][5],'Split':quickBv1[i][8],'Amount':quickBv1[i][9],'Date Eff':sogebank[j][0],'Cheque':sogebank[j][1],'Description':sogebank[j][2],'Debit':sogebank[j][3],'Credit':sogebank[j][4]}
+                        InCmp.append(dict2)
+    rslt = []
+    rslt.append({'cmp':Cmp,'incmp':InCmp})
+    return rslt
+#Comparaison
 def excel_handle(request):
-    
     if request.method == 'POST':
         file_path = os.path.join(APP_DIR, 'files/my.xls')
         print(request.FILES)
@@ -65,35 +108,28 @@ def excel_handle(request):
 
 
         
-        final = handle_SOGEBANK(qbI)
-        for j in range(len(final)):
-            print(final[j])
-
-
-        # for line in range(qbI.nrows):
-        #     print(qbI.row_values(line))
-
-
-        # print("Apres Quickbooks")
+        soge = handle_SOGEBANK(qbI)
+        qq = handle_QuickBooksv1(soI)
         
-        # for line in range(soI.nrows):
-        #     print(soI.row_values(line))
-        # for t in range(sh.nrows):
-        #     if t > 5:
-        #         #print(sh.row_values(t))
-        #         ll = sh.row_values(t)
-        #         dict = {'Transaction':ll[2],'Amount': ll[9]}
-        #         rlst.append(dict)
-        # sh2 = wb.sheet_by_index(1)
+        # print("Soge"+ str(len(final1)))
+        # print("Quickbooks"+ str(len(final)))
+        # for zz in range(len(final1)):
+        #     print(final1[zz])
 
-        # for t in range(sh2.nrows):
-        #     if t > 5:
-        #         print(sh2.row_values(t)[14])
-        #         # ll2 = sh2.row_values(t)
-        #         # dict = {'Transaction':ll2[2],'Amount': ll2[9]}
-        #         # rlst2.append(dict)
-        # return JsonResponse({'la':rlst})
-        return HttpResponse("sUCCES")
+        
+        #Handling Comparaison
+        # for i in range(len(final)):#QuickBooks
+        #     for j in range(len(final1)):#SOGEBANK
+        #         if final[i][2] == 'Expense':
+        #             if (convertingTOFloat(final[i][9])*-1) == convertingTOFloat(final1[j][3]):
+        #                 print(str(final[i][2])+" "+str(final[i][4])+" "+str(final[i][5])+" "+str(final[i][8])+" "+str(final[i][9])+" "+str(final1[j][0])+" "+str(final1[j][1])+" "+str(final1[j][2])+" "+str(final1[j][3])+" "+str(final1[j][4]))
+
+                        # print("OK"+str(convertingTOFloat(final[i][9])*-1)+str(convertingTOFloat(final1[j][3])))
+                        # print(final[i][5]+final[i][6])
+        #Handling Comparaison
+
+        #print(comparingFiles(qq,soge))
+        return JsonResponse({'comp':comparingFiles(qq,soge)})
     form = FichierForm()
     return render(request,'upload.html',{'form':form})
 
