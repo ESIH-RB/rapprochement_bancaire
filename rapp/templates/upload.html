@@ -4,10 +4,12 @@
 		<title>Uploaded File</title>
 	</head>
 	<body>
+		<h2>Upload du fichier QuickBooks</h2>
 		<form action="excel/comp" method="POST" enctype="multipart/form-data">
 			{% csrf_token %}
 			{{ form }}
 			<input type="submit" value="Enregister" />
-		</form>
+		</form><br /><br /><br />
+
 	</body>
 </html>
