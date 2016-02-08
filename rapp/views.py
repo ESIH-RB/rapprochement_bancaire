@@ -29,7 +29,19 @@ def getValidLineSOGEBANK(sheet):
                     fil.append(tmp)
     return fil
 
+def putInLineSOGEBANK(tab): #Put in line SOGEBANK's file important infomations
+    final = []
+    for i in range(len(tab)):
+        if i > 0:
+            if tab[i][3] == '':
+                sov = tab[i]
+            else:
+                sov[3]=tab[i][3]
+                final.append(sov)
+    return final
 
+def handle_SOGEBANK(sheet):
+    return putInLineSOGEBANK(getValidLineSOGEBANK(sheet))
 
 
 def excel_handle(request):
@@ -51,7 +63,12 @@ def excel_handle(request):
         qbI = qb.sheet_by_index(0)
         soI = so.sheet_by_index(0)
 
-        print(getValidLineSOGEBANK(qbI))
+
+        
+        final = handle_SOGEBANK(qbI)
+        for j in range(len(final)):
+            print(final[j])
+
 
         # for line in range(qbI.nrows):
         #     print(qbI.row_values(line))
