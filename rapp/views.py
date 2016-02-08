@@ -73,6 +73,7 @@ def convertingTOFloat(values):
         return float(r2)
 def comparingFiles(quickBv1,sogebank):
     Cmp = []
+    InCmp = []
     for i in range(len(quickBv1)):#QuickBooks
             for j in range(len(sogebank)):#SOGEBANK
                 if quickBv1[i][2] == 'Expense':
@@ -80,7 +81,12 @@ def comparingFiles(quickBv1,sogebank):
                         dict = {'Transaction':quickBv1[i][2],'Posting':quickBv1[i][4],'Name':quickBv1[i][5],'Split':quickBv1[i][8],'Amount':quickBv1[i][9],'Date Eff':sogebank[j][0],'Cheque':sogebank[j][1],'Description':sogebank[j][2],'Debit':sogebank[j][3],'Credit':sogebank[j][4]}
                         Cmp.append(dict)
                         # print(str(quickBv1[i][2])+" "+str(quickBv1[i][4])+" "+str(quickBv1[i][5])+" "+str(quickBv1[i][8])+" "+str(quickBv1[i][9])+" "+str(sogebank[j][0])+" "+str(sogebank[j][1])+" "+str(sogebank[j][2])+" "+str(sogebank[j][3])+" "+str(sogebank[j][4]))
-    return Cmp
+                    else:
+                        dict2 = {'Transaction':quickBv1[i][2],'Posting':quickBv1[i][4],'Name':quickBv1[i][5],'Split':quickBv1[i][8],'Amount':quickBv1[i][9],'Date Eff':sogebank[j][0],'Cheque':sogebank[j][1],'Description':sogebank[j][2],'Debit':sogebank[j][3],'Credit':sogebank[j][4]}
+                        InCmp.append(dict2)
+    rslt = []
+    rslt.append({'cmp':Cmp,'incmp':InCmp})
+    return rslt
 #Comparaison
 def excel_handle(request):
     if request.method == 'POST':
