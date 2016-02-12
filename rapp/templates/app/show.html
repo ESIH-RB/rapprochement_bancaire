@@ -5,54 +5,80 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Blank</h1>
+                    <h1 class="page-header">Resultat Rapprochement</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
             <div class="row">
+                    <div class="col-lg-4 col-lg-offset-4">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Rapprochement de deux rapports comptable
+                            </div>
+                            <div class="panel-body">
+                                <p>
+                                    Ici, une sortie de la comparaison effectuee sur deux fichiers telecharge.<br />
+                                    En Orange, Il y a les lignes entre les fichiers qui correspondent.<br />
+                                    En rouge, Il y a celles qui n'ont de correspondances.
+                                </p>
+                            </div>
+                            <div class="panel-footer">
+                                Rapprochement Bancaire
+                            </div>
+                        </div>
+                    </div>
             		<div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Context Classes
+                            Rapprochement 
                         </div>
-                        <!-- /.panel-heading -->
+                        <!--Primaire /.panel-heading -->
+
                         <div class="panel-body">
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Username</th>
+                                            <th>Posting</th>
+                                            <th>Description</th>
+                                            <th>Name</th>
+                                            <th>Credit</th>
+                                            <th>Split</th>
+                                            <th>Transaction</th>
+                                            <th>Amount</th>
+                                            <th>Cheque</th>
+                                            <th>Debit</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="success">
-                                            <td>1</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                        </tr>
-                                        <tr class="info">
-                                            <td>2</td>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                        </tr>
+                                        {% for egala in equal %}
                                         <tr class="warning">
-                                            <td>3</td>
-                                            <td>Larry</td>
-                                            <td>the Bird</td>
-                                            <td>@twitter</td>
+                                            <td>{{ egala.Posting }}</td>
+                                            <td>{{ egala.Description }}</td>
+                                            <td>{{ egala.Name }}</td>
+                                            <td>{{ egala.Credit }}</td>
+                                            <td>{{ egala.Split }}</td>
+                                            <td>{{ egala.Transaction }}</td>
+                                            <td>{{ egala.Amount }}</td>
+                                            <td>{{ egala.Cheque }}</td>
+                                            <td>{{ egala.Debit }}</td>
                                         </tr>
+                                        {% endfor%}
+
+                                        {% for egala in ine %}
                                         <tr class="danger">
-                                            <td>4</td>
-                                            <td>John</td>
-                                            <td>Smith</td>
-                                            <td>@jsmith</td>
+                                            <td>{{ egala.Posting }}</td>
+                                            <td>{{ egala.Description }}</td>
+                                            <td>{{ egala.Name }}</td>
+                                            <td>{{ egala.Credit }}</td>
+                                            <td>{{ egala.Split }}</td>
+                                            <td>{{ egala.Transaction }}</td>
+                                            <td>{{ egala.Amount }}</td>
+                                            <td>{{ egala.Cheque }}</td>
+                                            <td>{{ egala.Debit }}</td>
                                         </tr>
+                                        {% endfor %}
                                     </tbody>
                                 </table>
                             </div>

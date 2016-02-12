@@ -5,6 +5,9 @@ from rapp.forms import FichierForm
 import django_excel as excel
 import xlrd
 import os
+import random
+from rapp.models import *
+from django.contrib.auth.models import User
 #import pyexcel.ext.xls 
 #import pyexcel.ext.xlsx 
 
@@ -88,51 +91,54 @@ def comparingFiles(quickBv1,sogebank):
     rslt.append({'cmp':Cmp,'incmp':InCmp})
     return rslt
 #Comparaison
+
+#NamesFilesFUnnctions
+def namesFiles(filename):
+    chif = [1,2,3,4,5,6,7,8,9,0]
+    lettr = ['a','A','b','B','c','C','d','D','e','E']
+    chaine = ""
+    for i in range(6):
+        chx = random.randrange(0,9,3)
+        chaine+= str(chif[chx])
+        chaine+= str(lettr[(chx+3)%10])
+    r = filename.split('.',1)
+
+    nomFile = chaine+"."+r[1]
+
+    return nomFile
+#NamesFilesFUnnctions
 def excel_handle(request):
     if request.method == 'POST':
-        file_path = os.path.join(APP_DIR, 'files/my.xls')
-        print(request.FILES)
-        uploadFile(request.FILES['file2'],"a.xls")
-        uploadFile(request.FILES['fichier'],"b.xls")
-        egalite = [] #contient les lignes avec les informations d'egalite
-        inegalite = [] # contient les lignes avec les information d'inegalite
+        # print(request.POST['cmpname'])
+        vldNameSog = namesFiles(str(request.FILES['soge']))
+        vldNameQuick = namesFiles(str(request.FILES['quick']))
+        
+        uploadFile(request.FILES['soge'],vldNameSog)#uploadSogeFiles
+        uploadFile(request.FILES['quick'],vldNameQuick)#uploadQuickBooks
 
-        adr1 = os.path.join(APP_DIR, 'files/a.xls')
-        adr2 = os.path.join(APP_DIR, 'files/b.xls')
+        sogB = linkSOGEBANK(name = vldNameSog)
+        sogB.save()
+        quickB = linqQUICKBOOKS(name = vldNameQuick)
+        quickB.save()
 
-        qb = xlrd.open_workbook(adr1)
-        so = xlrd.open_workbook(adr2)
-        #print(wb.sheet_names())
-        qbI = qb.sheet_by_index(0)
-        soI = so.sheet_by_index(0)
+        c = linkSOGEBANK.objects.get(name= vldNameSog)
+        b = linqQUICKBOOKS.objects.get(name= vldNameQuick)
 
+        #getConnectedUser
+        user = User.objects.get(username="admin")
+        #getConnectedUser
+
+        #CreateLink for comparaison between files
+        compC = comparaison(nomComparaison = request.POST['cmpname'],cf_link_SOGEBANK=c, cf_link_QUICKBOOKS=b,ended=0,own_by = user)
+        compC.save()
+
+        #CreateLink for comparaison between files
 
         
-        soge = handle_SOGEBANK(qbI)
-        qq = handle_QuickBooksv1(soI)
-        
-        # print("Soge"+ str(len(final1)))
-        # print("Quickbooks"+ str(len(final)))
-        # for zz in range(len(final1)):
-        #     print(final1[zz])
-
-        
-        #Handling Comparaison
-        # for i in range(len(final)):#QuickBooks
-        #     for j in range(len(final1)):#SOGEBANK
-        #         if final[i][2] == 'Expense':
-        #             if (convertingTOFloat(final[i][9])*-1) == convertingTOFloat(final1[j][3]):
-        #                 print(str(final[i][2])+" "+str(final[i][4])+" "+str(final[i][5])+" "+str(final[i][8])+" "+str(final[i][9])+" "+str(final1[j][0])+" "+str(final1[j][1])+" "+str(final1[j][2])+" "+str(final1[j][3])+" "+str(final1[j][4]))
-
-                        # print("OK"+str(convertingTOFloat(final[i][9])*-1)+str(convertingTOFloat(final1[j][3])))
-                        # print(final[i][5]+final[i][6])
-        #Handling Comparaison
-
-        #print(comparingFiles(qq,soge))
-        return JsonResponse({'comp':comparingFiles(qq,soge)})
-    form = FichierForm()
-    return render(request,'upload.html',{'form':form})
-
+        # print(quickB)
+        return HttpResponse("<strong>Telechargement du fichier reussi retourne au <a href='/excel/dashboard/'>Dashboard</a></strong>")
+    else:
+        return render(request,'app/crapp.html',{})
 
 
 def main(request):
@@ -145,4 +151,32 @@ def dashboard(request):
     return render(request,'app/dashboard.html',{})
 
 def showTables(request):
-    return render(request,'app/show.html',{})
+    compp = comparaison.objects.all()
+    for ass in compp:
+        print(ass.nomComparaison+" "+str(ass.id))
+    return render(request,'app/showAll.html',{'all':compp})
+
+def descripComp(request,indice):
+    comp = comparaison.objects.get(id = int(indice))
+    sogeFile = comp.cf_link_SOGEBANK.name
+    quickFile = comp.cf_link_QUICKBOOKS.name
+    print(sogeFile+" "+quickFile)
+
+    adr1 = os.path.join(APP_DIR, 'files/'+sogeFile)
+    adr2 = os.path.join(APP_DIR, 'files/'+quickFile)
+
+    so = xlrd.open_workbook(adr1)
+    qb = xlrd.open_workbook(adr2)
+    
+    soI = so.sheet_by_index(0)
+    qbI = qb.sheet_by_index(0)
+
+    soge = handle_SOGEBANK(soI)
+    qq = handle_QuickBooksv1(qbI)
+
+    zz = comparingFiles(qq,soge)
+
+    egal = zz[0]['cmp']
+    inegal = zz[0]['incmp']
+    return render(request,'app/show.html',{'ine':inegal,'equal':egal})
+    # return JsonResponse({'ss':comparingFiles(qq,soge)})

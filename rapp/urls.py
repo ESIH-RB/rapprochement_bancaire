@@ -8,4 +8,5 @@ urlpatterns = patterns('',
 	url(r'^createrapp/', views.createRapp),
 	url(r'^dashboard/', views.dashboard),
 	url(r'^showrapp/', views.showTables),
+	url(r'^descrip/(?P<indice>[\w\-]+)/$', views.descripComp),
 )

@@ -1,4 +1,5 @@
 {% extends 'app/base.html' %}
+{% load staticfiles %}
 
 {% block contenu %}
 	<div id="page-wrapper">
@@ -22,8 +23,8 @@
                             	Toutes les fonctionnalites n'ont pas encore ete developpe.
                             	Aussi, y a t il un risque de bug ou que certains liens soient inactifs.
                             	Nous mettons en telechargement deux fichiers EXCEL pour vous permettre de tester l'application.<br /><br />
-                            	Un fichier contenant un rapport venant de la SOGEBANK <a>ICI</a><br />
-                            	Un fichier contenant un rapport venant d'une version de QuickBooks <a>ICI</a>
+                            	Un fichier contenant un rapport venant de la SOGEBANK <a href="{% static 'fich/sogebank.xlsx' %}">ICI</a><br />
+                            	Un fichier contenant un rapport venant d'une version de QuickBooks <a href="{% static 'fich/quickB.xlsx' %}">ICI</a>
                             </p>
                         </div>
                         <div class="panel-footer">

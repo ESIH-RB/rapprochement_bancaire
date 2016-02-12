@@ -12,13 +12,14 @@ class linqQUICKBOOKS(models.Model):
 	added_Date = models.DateTimeField(auto_now=True)
 
 class comparaison(models.Model):
+	nomComparaison = models.CharField(max_length=40)
 	cf_link_SOGEBANK = models.ForeignKey(linkSOGEBANK,on_delete=models.CASCADE,
 		verbose_name="Reference du fichier SOGEBANK",)
 	cf_link_QUICKBOOKS = models.ForeignKey(linqQUICKBOOKS,on_delete=models.CASCADE,
 		verbose_name="Reference du fichier QUICKBOOKS",)
 	own_by = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name="Proprietaire de la comparaison")
 	ended = models.IntegerField("Si la comparaison a ete valide")
-	dateValidate = models.DateTimeField() #date marquant la fin de la comparaison
+	dateValidate = models.DateTimeField(null=True) #date marquant la fin de la comparaison
 
 class contenuSOGEBANK(models.Model):
 	date = models.DateField()
