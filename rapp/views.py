@@ -133,3 +133,7 @@ def excel_handle(request):
     form = FichierForm()
     return render(request,'upload.html',{'form':form})
 
+
+
+def main(request):
+    return render(request,'app/test.html')
