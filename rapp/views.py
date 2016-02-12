@@ -137,3 +137,12 @@ def excel_handle(request):
 
 def main(request):
     return render(request,'app/test.html')
+
+def createRapp(request):
+    return render(request,'app/crapp.html',{})
+
+def dashboard(request):
+    return render(request,'app/dashboard.html',{})
+
+def showTables(request):
+    return render(request,'app/show.html',{})
