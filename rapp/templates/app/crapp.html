@@ -1,0 +1,54 @@
+{% extends 'app/base.html' %}
+{% load staticfiles %}
+
+
+{% block contenu%}
+	<div id="page-wrapper">
+	    <div class="container-fluid">
+	        <div class="row">
+	            <div class="col-lg-12">
+	                <h1 class="page-header">Creation de Rapprochement</h1>
+	            </div>
+	            <!-- /.col-lg-12 -->
+	        </div>
+	        <!-- /.row -->
+	        <div class="row">
+	        	<div class="col-lg-6 col-lg-offset-3">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            INFO-Rapprochement Bancaire
+                        </div>
+                        <div class="panel-body">
+                            <p> 
+                            	Ici c'est le prototype de l'application Rapprochement bancaire
+                            	Toutes les fonctionnalites n'ont pas encore ete developpe.
+                            	Aussi, y a t il un risque de bug ou que certains liens soient inactifs.
+                            	Nous mettons en telechargement deux fichiers EXCEL pour vous permettre de tester l'application.<br /><br />
+                            	Un fichier contenant un rapport venant de la SOGEBANK <a href="{% static 'fich/sogebank.xlsx' %}">ICI</a><br />
+                            	Un fichier contenant un rapport venant d'une version de QuickBooks <a href="{% static 'fich/quickB.xlsx' %}">ICI</a>
+                            </p>
+                        </div>
+                        <div class="panel-footer">
+                            INFO-Rapprochement Bancaire
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+            	<h3>Telechargement des fichiers Excel</h3>
+		        <form method="POST" action="/excel/comp/" enctype="multipart/form-data">
+		        	<div class="form-group">
+		        		{% csrf_token %}
+                        <label>Nom de la comparaison</label>
+                        <input class="form-control" placeholder="Enter text" name="cmpname">
+	                    <label for="sog">Importation du fichier SOGEBANK</label>
+	                    <input type="file" id="sog" name="soge">
+	                    <label for="sog">Importation du fichier QUICKBOOKS</label>
+	                    <input type="file" id="quick" name="quick"><br />
+	                    <button type="submit" class="btn btn-default btn-primary">SEND</button>
+	                </div>
+		        </form>
+	    	</div>
+	    <!-- /.container-fluid -->
+	</div>
+{% endblock %}	
