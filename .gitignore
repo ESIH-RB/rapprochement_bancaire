@@ -21,6 +21,7 @@ parts/
 sdist/
 var/
 migrations/
+files/
 *.egg-info/
 .installed.cfg
 *.egg
