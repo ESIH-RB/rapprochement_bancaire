@@ -22,6 +22,7 @@ sdist/
 var/
 migrations/
 files/
+.idea/
 *.egg-info/
 .installed.cfg
 *.egg
