@@ -1,5 +1,17 @@
-# rapprochement_bancaire
+# Rapprochement Bancaire
 
 
-L’objectif de cette application est d’aller chercher des informations dans le rapport Sogebank, d’aller les comparer à des informations du rapport Quickbooks, et de dire quelles informations « match ». L’application présentera à l’utilisateur les informations qui « match », et il aura le choix de valider ou d’invalider le « match ». Celles qui ne « match » pas seront mises en évidence, de la même façon que les « match » invalidés par l’utilisateur.
+Ce service proposé aux clients sous forme de page web a pour objectif de réaliser les rapprochements bancaires des entreprises.
 
+> L'utilisateur doit au préalable exporter le rapport Quickbooks de la période pour laquelle il veut réaliser un rapprochement bancaire, ainsi que le rapport présenté en ligne par sa banque pour cette même période.
+
+> Il doit alors uploader ces rapports via la page web.
+
+L'application va ensuite générer un rapport rapproché des deux documents, et indiquer à l'utilisateur différents résultats:
+
+*Les lignes rapprochées par l'application à confirmer par l'utilisateur.
+*Les lignes rapprochées par l'application mais qui demandent une finalisation manuelle par l'utilisateur.
+*Les lignes ne présentant aucune correspondance entre les deux documents, à rapprocher manuellement.
+
+
+__L'utilisateur aura la possibilité d'effectuer différentes actions pour travailler sur ce rapport et le finaliser.__
