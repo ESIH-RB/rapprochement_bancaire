@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, HttpResponseBadRequest
 # Create your views here.
 from rapp.forms import FichierForm
-import django_excel as excel
 import xlrd
 import os
 import random

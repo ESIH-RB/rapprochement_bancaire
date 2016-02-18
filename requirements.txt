@@ -1,0 +1,5 @@
+Django==1.9.2
+django-excel==0.0.4
+pyexcel==0.2.0
+xlrd==0.9.4
+
